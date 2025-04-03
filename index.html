@@ -2,9 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>สุ่มเมนูอาหาร - Random Menu</title>
+  <title>สุ่มหนัง - Random Movie</title>
   <style>
-    /* รีเซ็ตขนาด margin/padding พื้นฐาน */
     * {
       margin: 0;
       padding: 0;
@@ -90,18 +89,18 @@
 <body>
 
   <header>
-    <h1>สุ่มเมนูอาหาร (Random Menu)</h1>
-    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหาร</p>
+    <h1>สุ่มหนัง (Random Movie)</h1>
+    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มหนัง</p>
   </header>
 
   <div class="container">
     <div class="result">
-      <h2 id="menuMessage">—</h2>
-      <p id="menuItem">—</p>
+      <h2 id="movieMessage">—</h2>
+      <p id="movieItem">—</p>
     </div>
 
     <div style="text-align:center;">
-      <button onclick="getRandomMenu()">สุ่มเมนูอาหาร</button>
+      <button onclick="getRandomMovie()">สุ่มหนัง</button>
     </div>
   </div>
 
@@ -110,27 +109,24 @@
   </footer>
 
   <script>
-    // ฟังก์ชันดึงข้อมูลสุ่มเมนูอาหารจาก Netlify Function
-    async function getRandomMenu() {
+    async function getRandomMovie() {
       try {
-        const response = await fetch('/.netlify/functions/random-menu');
+        const response = await fetch('/.netlify/functions/random-movie');
         if (!response.ok) {
-          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลเมนู');
+          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลหนัง');
         }
         const data = await response.json();
         
-        // อัปเดตข้อความในหน้าเว็บ
-        document.getElementById('menuMessage').textContent = data.message;
-        document.getElementById('menuItem').textContent = data.menu;
+        document.getElementById('movieMessage').textContent = data.message;
+        document.getElementById('movieItem').textContent = data.movie;
       } catch (err) {
-        document.getElementById('menuMessage').textContent = 'Error';
-        document.getElementById('menuItem').textContent = err.message;
+        document.getElementById('movieMessage').textContent = 'Error';
+        document.getElementById('movieItem').textContent = err.message;
       }
     }
 
-    // โหลดหน้าแล้วให้สุ่มเมนูครั้งแรกอัตโนมัติ
     window.addEventListener('DOMContentLoaded', () => {
-      getRandomMenu();
+      getRandomMovie();
     });
   </script>
 </body>
