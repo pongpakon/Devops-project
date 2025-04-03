@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>สุ่มเมนูอาหาร - Random Menu</title>
   <style>
-
+    
     * {
       margin: 0;
       padding: 0;
@@ -63,9 +63,13 @@
       color: #222;
     }
 
+    .buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+
     button {
-      display: inline-block;
-      margin: 0 auto;
+      margin: 0 5px;
       padding: 12px 20px;
       font-size: 1rem;
       border: none;
@@ -77,6 +81,18 @@
 
     button:hover {
       background: #0056b3;
+    }
+
+    #allMenus {
+      display: none; 
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 6px;
+    }
+
+    #allMenus h3 {
+      margin-bottom: 10px;
     }
 
     footer {
@@ -91,7 +107,7 @@
 
   <header>
     <h1>สุ่มเมนูอาหาร (Random Menu)</h1>
-    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหารจาก Netlify Function!</p>
+    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหาร หรือดูรายการทั้งหมดจาก Netlify Function!</p>
   </header>
 
   <div class="container">
@@ -100,8 +116,14 @@
       <p id="menuItem">—</p>
     </div>
 
-    <div style="text-align:center;">
+    <div class="buttons">
       <button onclick="getRandomMenu()">สุ่มเมนูอาหาร</button>
+      <button onclick="showAllMenus()">ดูเมนูทั้งหมด</button>
+    </div>
+
+    <div id="allMenus">
+      <h3>รายการเมนูทั้งหมด</h3>
+      <div id="allMenusList"></div>
     </div>
   </div>
 
@@ -110,16 +132,16 @@
   </footer>
 
   <script>
- 
+    
     async function getRandomMenu() {
       try {
         const response = await fetch('/.netlify/functions/random-menu');
         if (!response.ok) {
-          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลเมนู');
+          throw new Error('เกิดข้อผิดพลาดในการดึงเมนู');
         }
         const data = await response.json();
         
-        // อัปเดตข้อความในหน้าเว็บ
+        // อัปเดตข้อความในหน้าเว็บ (ส่วนสุ่มเมนู)
         document.getElementById('menuMessage').textContent = data.message;
         document.getElementById('menuItem').textContent = data.menu;
       } catch (err) {
@@ -128,7 +150,31 @@
       }
     }
 
- 
+    
+    async function showAllMenus() {
+      try {
+        const response = await fetch('/.netlify/functions/random-menu?all=true');
+        if (!response.ok) {
+          throw new Error('เกิดข้อผิดพลาดในการดึงเมนูทั้งหมด');
+        }
+        const menus = await response.json(); // กลับมาเป็น Array
+
+        
+        let html = '<ul>';
+        for (const menu of menus) {
+          html += `<li>${menu}</li>`;
+        }
+        html += '</ul>';
+
+        
+        document.getElementById('allMenusList').innerHTML = html;
+        document.getElementById('allMenus').style.display = 'block';
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    
     window.addEventListener('DOMContentLoaded', () => {
       getRandomMenu();
     });

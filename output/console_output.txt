@@ -1,0 +1,226 @@
+Started by user NATHAKON KHANJOK
+Obtained Jenkinsfile from git https://github.com/Nathakon1/Devops-final-project.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/final-project
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/Nathakon1/Devops-final-project.git
+ > git init /var/jenkins_home/workspace/final-project # timeout=10
+Fetching upstream changes from https://github.com/Nathakon1/Devops-final-project.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/Nathakon1/Devops-final-project.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/Nathakon1/Devops-final-project.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision c18bb4b126d389fa7686910beb8397f47bcf1a12 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f c18bb4b126d389fa7686910beb8397f47bcf1a12 # timeout=10
+Commit message: "Delete jenkinsfile"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $NETLIFY_AUTH_TOKEN
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 5c478334a174f88387494c8d5a425863fbbb32e1a5637697acfa9d9d83ffbc64
+but /var/jenkins_home/workspace/final-project could not be found among []
+but /var/jenkins_home/workspace/final-project@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/final-project -v /var/jenkins_home/workspace/final-project:/var/jenkins_home/workspace/final-project:rw,z -v /var/jenkins_home/workspace/final-project@tmp:/var/jenkins_home/workspace/final-project@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top edc44b7d16965a35e52ee52208b041c2c50e8e0bca25f26de07f17d514a6f911 -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+ Verifying required files...
+[Pipeline] sh
++ test -f index.html
++ test -f netlify/functions/random-menu.js
++ echo 'All necessary files are in place!'
+All necessary files are in place!
+[Pipeline] }
+$ docker stop --time=1 edc44b7d16965a35e52ee52208b041c2c50e8e0bca25f26de07f17d514a6f911
+$ docker rm -f --volumes edc44b7d16965a35e52ee52208b041c2c50e8e0bca25f26de07f17d514a6f911
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 5c478334a174f88387494c8d5a425863fbbb32e1a5637697acfa9d9d83ffbc64
+but /var/jenkins_home/workspace/final-project could not be found among []
+but /var/jenkins_home/workspace/final-project@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/final-project -v /var/jenkins_home/workspace/final-project:/var/jenkins_home/workspace/final-project:rw,z -v /var/jenkins_home/workspace/final-project@tmp:/var/jenkins_home/workspace/final-project@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top 0f194d093270306ba4ff18bcd8831724ffa956aa6db3bd50deb4b15b9b6df737 -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+Running function load test...
+[Pipeline] sh
++ node -e 'require('"'"'./netlify/functions/random-menu.js'"'"'); console.log('"'"'Function loaded successfully!'"'"')'
+Function loaded successfully!
+[Pipeline] }
+$ docker stop --time=1 0f194d093270306ba4ff18bcd8831724ffa956aa6db3bd50deb4b15b9b6df737
+$ docker rm -f --volumes 0f194d093270306ba4ff18bcd8831724ffa956aa6db3bd50deb4b15b9b6df737
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:18-alpine
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 5c478334a174f88387494c8d5a425863fbbb32e1a5637697acfa9d9d83ffbc64
+but /var/jenkins_home/workspace/final-project could not be found among []
+but /var/jenkins_home/workspace/final-project@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/final-project -v /var/jenkins_home/workspace/final-project:/var/jenkins_home/workspace/final-project:rw,z -v /var/jenkins_home/workspace/final-project@tmp:/var/jenkins_home/workspace/final-project@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:18-alpine cat
+$ docker top 7ad22bc9bad475914648f6b41550d210d867eb289c54d897f4067c3b40030991 -eo pid,comm
+[Pipeline] {
+[Pipeline] echo
+Deploying the project to Netlify...
+[Pipeline] sh
++ npm install netlify-cli
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated npmlog@5.0.1: This package is no longer supported.
+npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
+npm warn deprecated gauge@3.0.2: This package is no longer supported.
+npm warn deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+npm warn deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+npm warn deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+npm warn deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+npm warn deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+npm warn deprecated glob@8.1.0: Glob versions prior to v9 are no longer supported
+
+added 2703 packages, and audited 2707 packages in 2m
+
+455 packages are looking for funding
+  run `npm fund` for details
+
+35 vulnerabilities (3 low, 17 moderate, 15 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
++ node_modules/.bin/netlify deploy '--auth=****' '--site=d9acdd1f-7d7d-45de-934e-a56eec2be08e' '--dir=.' --prod
+Deploy path:    /var/jenkins_home/workspace/final-project
+Functions path: /var/jenkins_home/workspace/final-project/netlify/functions
+Deploying to main site URL...
+[33m⠋[39m Uploading blobs to deploy store...
+
+​
+Netlify Build                                                 
+────────────────────────────────────────────────────────────────
+​
+❯ Version
+  @netlify/build 30.0.6
+​
+❯ Flags
+  auth: ****
+  deployId: 67ee99c7f84204c9f4f6234d
+  dir: .
+  open: false
+  prod: true
+  prodIfUnlocked: false
+  site: d9acdd1f-7d7d-45de-934e-a56eec2be08e
+  skipFunctionsCache: false
+​
+❯ Current directory
+  /var/jenkins_home/workspace/final-project
+​
+❯ Config file
+  No config file was defined: using default values.
+​
+❯ Context
+  dev
+[33m⠙[39m Finished uploading blobs to deploy store
+[33m⠋[39m Hashing files...
+[33m⠋[39m Looking for a functions cache...
+[33m⠙[39m No cached functions were found
+[33m⠙[39m Finished hashing 25 files and 1 functions
+[33m⠋[39m CDN diffing files...
+[33m⠙[39m CDN requesting 7 files and 1 functions
+[33m⠋[39m Uploading 8 files
+[33m⠙[39m Finished uploading 8 assets
+[33m⠋[39m Waiting for deploy to go live...
+[33m⠙[39m Deploy is live!
+
+Build logs:         https://app.netlify.com/sites/bright-alfajores-eb5742/deploys/67ee99c7f84204c9f4f6234d
+Function logs:      https://app.netlify.com/sites/bright-alfajores-eb5742/logs/functions
+Edge function Logs: https://app.netlify.com/sites/bright-alfajores-eb5742/logs/edge-functions
+Unique deploy URL:  https://67ee99c7f84204c9f4f6234d--bright-alfajores-eb5742.netlify.app
+Website URL:        https://bright-alfajores-eb5742.netlify.app
+[Pipeline] }
+$ docker stop --time=1 7ad22bc9bad475914648f6b41550d210d867eb289c54d897f4067c3b40030991
+$ docker rm -f --volumes 7ad22bc9bad475914648f6b41550d210d867eb289c54d897f4067c3b40030991
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Post Deploy)
+[Pipeline] echo
+     Deployment is complete! Your website is now live.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+CI/CD pipeline executed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
