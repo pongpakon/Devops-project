@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>สุ่มเมนูอาหาร - Random Menu</title>
   <style>
-    /* รีเซ็ตขนาด margin/padding พื้นฐาน */
+
     * {
       margin: 0;
       padding: 0;
@@ -110,7 +110,7 @@
   </footer>
 
   <script>
-    // ฟังก์ชันดึงข้อมูลสุ่มเมนูอาหารจาก Netlify Function
+ 
     async function getRandomMenu() {
       try {
         const response = await fetch('/.netlify/functions/random-menu');
@@ -128,7 +128,7 @@
       }
     }
 
-    // โหลดหน้าแล้วให้สุ่มเมนูครั้งแรกอัตโนมัติ
+ 
     window.addEventListener('DOMContentLoaded', () => {
       getRandomMenu();
     });
