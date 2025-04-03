@@ -60,18 +60,9 @@ exports.handler = async (event, context) => {
   ];
 
   // สุ่ม index
-  const query = event.queryStringParameters || {};
-
-  // ถ้าเรียกด้วย ?all=true => ส่งกลับรายการเมนูทั้งหมดในรูป Array
-  if (query.all === 'true') {
-    return {
-      statusCode: 200,
-      body: JSON.stringify(menus)
-    };
-  }
-
-  // ไม่ได้ส่ง all=true => สุ่มเมนู 1 รายการ
   const randomIndex = Math.floor(Math.random() * menus.length);
+
+  // ส่งค่ากลับเป็น JSON
   return {
     statusCode: 200,
     body: JSON.stringify({

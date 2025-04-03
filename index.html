@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>สุ่มเมนูอาหาร - Random Menu</title>
   <style>
-    
+    /* รีเซ็ตขนาด margin/padding พื้นฐาน */
     * {
       margin: 0;
       padding: 0;
@@ -63,13 +63,9 @@
       color: #222;
     }
 
-    .buttons {
-      text-align: center;
-      margin: 20px 0;
-    }
-
     button {
-      margin: 0 5px;
+      display: inline-block;
+      margin: 0 auto;
       padding: 12px 20px;
       font-size: 1rem;
       border: none;
@@ -81,18 +77,6 @@
 
     button:hover {
       background: #0056b3;
-    }
-
-    #allMenus {
-      display: none; 
-      margin-top: 20px;
-      padding: 15px;
-      background: #f0f0f0;
-      border-radius: 6px;
-    }
-
-    #allMenus h3 {
-      margin-bottom: 10px;
     }
 
     footer {
@@ -107,7 +91,7 @@
 
   <header>
     <h1>สุ่มเมนูอาหาร (Random Menu)</h1>
-    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหาร หรือดูรายการทั้งหมดจาก Netlify Function!</p>
+    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหารจาก Netlify Function!</p>
   </header>
 
   <div class="container">
@@ -116,14 +100,8 @@
       <p id="menuItem">—</p>
     </div>
 
-    <div class="buttons">
+    <div style="text-align:center;">
       <button onclick="getRandomMenu()">สุ่มเมนูอาหาร</button>
-      <button onclick="showAllMenus()">ดูเมนูทั้งหมด</button>
-    </div>
-
-    <div id="allMenus">
-      <h3>รายการเมนูทั้งหมด</h3>
-      <div id="allMenusList"></div>
     </div>
   </div>
 
@@ -132,17 +110,12 @@
   </footer>
 
   <script>
-    // สถานะว่ากำลังแสดงเมนูทั้งหมดอยู่หรือไม่
-    let isAllMenusVisible = false;
-    // ข้อมูลเมนูทั้งหมดที่ fetch มา (เก็บไว้ reuse)
-    let allMenusData = [];
-
-    // ฟังก์ชันสุ่มเมนูอาหาร (เรียกใช้งานแบบปกติ)
+    // ฟังก์ชันดึงข้อมูลสุ่มเมนูอาหารจาก Netlify Function
     async function getRandomMenu() {
       try {
         const response = await fetch('/.netlify/functions/random-menu');
         if (!response.ok) {
-          throw new Error('เกิดข้อผิดพลาดในการดึงเมนู');
+          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลเมนู');
         }
         const data = await response.json();
         
@@ -155,50 +128,7 @@
       }
     }
 
-    // ฟังก์ชัน toggle แสดง/ซ่อนเมนูทั้งหมด
-    async function toggleAllMenus() {
-      const allMenusDiv = document.getElementById('allMenus');
-      const toggleBtn = document.getElementById('toggleButton');
-
-      if (!isAllMenusVisible) {
-        // ถ้ายังไม่แสดง => fetch ข้อมูล และแสดง
-        try {
-          // ถ้ายังไม่เคย fetch เลย หรืออยาก fetch ใหม่ทุกครั้ง ก็สามารถ fetch ซ้ำได้
-          if (allMenusData.length === 0) {
-            const response = await fetch('/.netlify/functions/random-menu?all=true');
-            if (!response.ok) {
-              throw new Error('เกิดข้อผิดพลาดในการดึงเมนูทั้งหมด');
-            }
-            allMenusData = await response.json(); // ได้เป็น Array
-          }
-
-          // สร้างรายการ <li> สำหรับแต่ละเมนู
-          let html = '<ul>';
-          for (const menu of allMenusData) {
-            html += `<li>${menu}</li>`;
-          }
-          html += '</ul>';
-
-          // ใส่ลงใน div #allMenusList แล้วแสดง
-          document.getElementById('allMenusList').innerHTML = html;
-          allMenusDiv.style.display = 'block';
-
-          // เปลี่ยนข้อความปุ่ม
-          toggleBtn.textContent = 'ซ่อนเมนูทั้งหมด';
-          // เปลี่ยนสถานะเป็นกำลังแสดง
-          isAllMenusVisible = true;
-        } catch (err) {
-          alert(err.message);
-        }
-      } else {
-        // ถ้ากำลังแสดงอยู่ => ซ่อน
-        allMenusDiv.style.display = 'none';
-        toggleBtn.textContent = 'ดูเมนูทั้งหมด';
-        isAllMenusVisible = false;
-      }
-    }
-
-    // เมื่อโหลดหน้าครั้งแรก => สุ่มเมนู 1 ครั้ง
+    // โหลดหน้าแล้วให้สุ่มเมนูครั้งแรกอัตโนมัติ
     window.addEventListener('DOMContentLoaded', () => {
       getRandomMenu();
     });
