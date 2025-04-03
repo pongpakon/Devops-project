@@ -71,7 +71,7 @@ post {
         echo "CI/CD pipeline executed successfully!"
     }
     failure {
-        echo " An error occurred during the pipeline execution. Please check the logs!"
+        echo " An error occurred during the pipeline execution. Please check the logs! "
     }
 }
 
