@@ -132,7 +132,12 @@
   </footer>
 
   <script>
-    
+    // สถานะว่ากำลังแสดงเมนูทั้งหมดอยู่หรือไม่
+    let isAllMenusVisible = false;
+    // ข้อมูลเมนูทั้งหมดที่ fetch มา (เก็บไว้ reuse)
+    let allMenusData = [];
+
+    // ฟังก์ชันสุ่มเมนูอาหาร (เรียกใช้งานแบบปกติ)
     async function getRandomMenu() {
       try {
         const response = await fetch('/.netlify/functions/random-menu');
@@ -141,7 +146,7 @@
         }
         const data = await response.json();
         
-        // อัปเดตข้อความในหน้าเว็บ (ส่วนสุ่มเมนู)
+        // อัปเดตข้อความในหน้าเว็บ
         document.getElementById('menuMessage').textContent = data.message;
         document.getElementById('menuItem').textContent = data.menu;
       } catch (err) {
@@ -150,31 +155,50 @@
       }
     }
 
-    
-    async function showAllMenus() {
-      try {
-        const response = await fetch('/.netlify/functions/random-menu?all=true');
-        if (!response.ok) {
-          throw new Error('เกิดข้อผิดพลาดในการดึงเมนูทั้งหมด');
-        }
-        const menus = await response.json(); // กลับมาเป็น Array
+    // ฟังก์ชัน toggle แสดง/ซ่อนเมนูทั้งหมด
+    async function toggleAllMenus() {
+      const allMenusDiv = document.getElementById('allMenus');
+      const toggleBtn = document.getElementById('toggleButton');
 
-        
-        let html = '<ul>';
-        for (const menu of menus) {
-          html += `<li>${menu}</li>`;
-        }
-        html += '</ul>';
+      if (!isAllMenusVisible) {
+        // ถ้ายังไม่แสดง => fetch ข้อมูล และแสดง
+        try {
+          // ถ้ายังไม่เคย fetch เลย หรืออยาก fetch ใหม่ทุกครั้ง ก็สามารถ fetch ซ้ำได้
+          if (allMenusData.length === 0) {
+            const response = await fetch('/.netlify/functions/random-menu?all=true');
+            if (!response.ok) {
+              throw new Error('เกิดข้อผิดพลาดในการดึงเมนูทั้งหมด');
+            }
+            allMenusData = await response.json(); // ได้เป็น Array
+          }
 
-        
-        document.getElementById('allMenusList').innerHTML = html;
-        document.getElementById('allMenus').style.display = 'block';
-      } catch (err) {
-        alert(err.message);
+          // สร้างรายการ <li> สำหรับแต่ละเมนู
+          let html = '<ul>';
+          for (const menu of allMenusData) {
+            html += `<li>${menu}</li>`;
+          }
+          html += '</ul>';
+
+          // ใส่ลงใน div #allMenusList แล้วแสดง
+          document.getElementById('allMenusList').innerHTML = html;
+          allMenusDiv.style.display = 'block';
+
+          // เปลี่ยนข้อความปุ่ม
+          toggleBtn.textContent = 'ซ่อนเมนูทั้งหมด';
+          // เปลี่ยนสถานะเป็นกำลังแสดง
+          isAllMenusVisible = true;
+        } catch (err) {
+          alert(err.message);
+        }
+      } else {
+        // ถ้ากำลังแสดงอยู่ => ซ่อน
+        allMenusDiv.style.display = 'none';
+        toggleBtn.textContent = 'ดูเมนูทั้งหมด';
+        isAllMenusVisible = false;
       }
     }
 
-    
+    // เมื่อโหลดหน้าครั้งแรก => สุ่มเมนู 1 ครั้ง
     window.addEventListener('DOMContentLoaded', () => {
       getRandomMenu();
     });
